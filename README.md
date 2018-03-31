@@ -65,6 +65,11 @@ memo 备注
 action_time 操作时间
 
 
+### refer
+txhash 交易hash 
+refer_id 推荐码
+status 交易状态
+create_time 创建时间
 
 
 
