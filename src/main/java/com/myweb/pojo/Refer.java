@@ -12,6 +12,7 @@ public class Refer {
     private String referCode;
     private Integer status;
     private String createTime;
+    private Integer referFee;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -63,18 +64,29 @@ public class Refer {
         this.createTime = createTime;
     }
 
+    @Basic
+    @Column(name = "refer_fee", nullable = true, precision = 0)
+    public Integer getReferFee() {
+        return referFee;
+    }
+
+    public void setReferFee(Integer referFee) {
+        this.referFee = referFee;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Refer refer = (Refer) o;
+        com.myweb.pojo.Refer refer = (com.myweb.pojo.Refer) o;
 
         if (id != refer.id) return false;
         if (txhash != null ? !txhash.equals(refer.txhash) : refer.txhash != null) return false;
         if (referCode != null ? !referCode.equals(refer.referCode) : refer.referCode != null) return false;
         if (status != null ? !status.equals(refer.status) : refer.status != null) return false;
         if (createTime != null ? !createTime.equals(refer.createTime) : refer.createTime != null) return false;
+        if (referFee != null ? !referFee.equals(refer.referFee) : refer.referFee != null) return false;
 
         return true;
     }
@@ -86,6 +98,7 @@ public class Refer {
         result = 31 * result + (referCode != null ? referCode.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (referFee != null ? referFee.hashCode() : 0);
         return result;
     }
 }
