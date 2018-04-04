@@ -101,14 +101,14 @@ public class OneController {
 
     //查询推荐的总数量
     @ResponseBody
-    @RequestMapping(value = "/refer/queryCount", method = RequestMethod.POST)
+    @RequestMapping(value = "/refer/queryCount", method = RequestMethod.GET)
     public Result queryCount(@ModelAttribute Refer refer) {
         return oneService.queryCount(refer);
     }
 
     //查询推荐费总和
     @ResponseBody
-    @RequestMapping(value = "/refer/queryFees", method = RequestMethod.POST)
+    @RequestMapping(value = "/refer/queryFees", method = RequestMethod.GET)
     public Result queryFees(@ModelAttribute Refer refer) {
         return oneService.queryFees(refer);
     }

@@ -2,6 +2,7 @@ package com.myweb.dao.jpa.hibernate;
 
 import com.myweb.pojo.Opslog;
 import com.myweb.pojo.Refer;
+import com.myweb.vo.SumReferFeeVo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.RepositoryDefinition;
@@ -15,6 +16,6 @@ public interface ReferRepository extends JpaRepository<Refer, Integer> {
 
     public List<Refer> findByReferCode (String referCode);
 
-    @Query("select sum(refer_fee) from refer where refer_code = ?1")
-    public Integer countSumByReferCode(String referCode);
+    @Query("select new com.myweb.vo.SumReferFeeVo(sum(refer.referFee)) from Refer refer where refer.referCode = ?1")
+    public SumReferFeeVo countSumByReferCode(String referCode);
 }

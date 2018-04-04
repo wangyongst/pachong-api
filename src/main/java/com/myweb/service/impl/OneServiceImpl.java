@@ -3,6 +3,7 @@ package com.myweb.service.impl;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.OneService;
+import com.myweb.vo.SumReferFeeVo;
 import com.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -245,10 +246,10 @@ public class OneServiceImpl implements OneService {
     @Override
     public Result queryFees(Refer refer) {
         Result result = new Result();
-        Integer referfee = referRepository.countSumByReferCode(refer.getReferCode());
-        if (referfee != null) {
+        SumReferFeeVo srfv = referRepository.countSumByReferCode(refer.getReferCode());
+        if (srfv != null) {
             result.setStatus(1);
-            result.setData(referfee);
+            result.setData(srfv.getSumReferFee());
             result.setMessage("Refer queryfee success!");
         } else {
             result.setStatus(0);
