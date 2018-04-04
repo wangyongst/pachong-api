@@ -3,12 +3,12 @@ package com.myweb.service.impl;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.OneService;
-import com.myweb.vo.SumReferFeeVo;
 import com.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -246,10 +246,10 @@ public class OneServiceImpl implements OneService {
     @Override
     public Result queryFees(Refer refer) {
         Result result = new Result();
-        SumReferFeeVo srfv = referRepository.countSumByReferCode(refer.getReferCode());
+        BigDecimal srfv = referRepository.countSumByReferCode(refer.getReferCode());
         if (srfv != null) {
             result.setStatus(1);
-            result.setData(srfv.getSumReferFee());
+            result.setData(srfv);
             result.setMessage("Refer queryfee success!");
         } else {
             result.setStatus(0);

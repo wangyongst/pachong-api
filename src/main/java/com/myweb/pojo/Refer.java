@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 
 @Entity
 public class Refer {
@@ -12,7 +13,7 @@ public class Refer {
     private String referCode;
     private Integer status;
     private String createTime;
-    private Integer referFee;
+    private BigDecimal referFee;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -65,12 +66,12 @@ public class Refer {
     }
 
     @Basic
-    @Column(name = "refer_fee", nullable = true, precision = 0)
-    public Integer getReferFee() {
+    @Column(name = "refer_fee", nullable = true, precision = 2)
+    public BigDecimal getReferFee() {
         return referFee;
     }
 
-    public void setReferFee(Integer referFee) {
+    public void setReferFee(BigDecimal referFee) {
         this.referFee = referFee;
     }
 
