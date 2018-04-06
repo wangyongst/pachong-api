@@ -35,7 +35,7 @@ public class OneController {
     //设置头像
     @ResponseBody
     @RequestMapping(value = "/user/setAvatar", method = RequestMethod.POST)
-    public Result setAvatar(@RequestParam("avatar") MultipartFile multipartFile, @ModelAttribute User user) {
+    public Result setAvatar(@RequestParam("avatarFile") MultipartFile multipartFile, @ModelAttribute User user) {
         return oneService.setAvatar(multipartFile, user);
     }
 

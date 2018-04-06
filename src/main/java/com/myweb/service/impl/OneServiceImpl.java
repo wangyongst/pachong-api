@@ -104,9 +104,9 @@ public class OneServiceImpl implements OneService {
         String fileNameIn = null;
         try {
             fileNameIn = saveImg(multipartFile, fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()));
-            if (StringUtils.isNotBlank(fileName)) {
+            if (StringUtils.isNotBlank(fileNameIn)) {
                 User savedUser = userRepository.findOne(user.getId());
-                savedUser.setAvatar(location + File.separator + fileName);
+                savedUser.setAvatar(location + File.separator + fileNameIn);
                 userRepository.save(savedUser);
                 result.setStatus(1);
                 result.setData(savedUser);
