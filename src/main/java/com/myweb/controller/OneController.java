@@ -39,7 +39,7 @@ public class OneController {
         return oneService.setAvatar(multipartFile, user);
     }
 
-    //获取推荐码生成推荐事件
+    //获取推荐码
     @ResponseBody
     @RequestMapping(value = "/user/getReferUrl", method = RequestMethod.GET)
     public Result getReferUrl(@ModelAttribute User user) {
