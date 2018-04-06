@@ -274,6 +274,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         if (StringUtils.isNotBlank(refer.getReferCode())) {
+            refer.setId(0);
             refer.setStatus("buy");
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             long currentTime = System.currentTimeMillis();
@@ -285,7 +286,7 @@ public class OneServiceImpl implements OneService {
             result.setMessage("The Fishery cant be found!");
             return result;
         }
-        savedFishery.setSellStatus("");
+        savedFishery.setSellStatus(null);
         savedFishery.setUserId(fishery.getUserId());
         fisheryRepository.save(savedFishery);
         marketRepository.deleteAllByFisheryId(fishery.getId());
