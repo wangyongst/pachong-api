@@ -3,6 +3,8 @@ package com.myweb.service;
 
 import com.myweb.pojo.*;
 import com.utils.Result;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface OneService {
 
@@ -28,8 +30,10 @@ public interface OneService {
 
     public Result favor(Market market);
 
-    public Result query(Opslog opslog);
+    public Result query(Opslog opslog,PageRequest pageRequest);
 
     public void createLog(Opslog opslog);
+
+    public Result uploadAvatar(MultipartFile multipartFile);
 
 }
