@@ -3,12 +3,18 @@ package com.myweb.service.impl;
 import com.myweb.dao.jpa.hibernate.*;
 import com.myweb.pojo.*;
 import com.myweb.service.OneService;
+import com.myweb.vo.GetReferUrlVo;
 import com.utils.Result;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -34,167 +40,216 @@ public class OneServiceImpl implements OneService {
 
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result registry(User user) {
         Result result = new Result();
-        User savedUser = userRepository.save(user);
-        if (savedUser != null) {
-            result.setStatus(1);
-            result.setData(savedUser);
-            result.setMessage("User registry success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("User registry unsuccess!");
+        if (StringUtils.isBlank(user.getAddress()) || StringUtils.isBlank(user.getSignMessage()) || StringUtils.isBlank(user.getSignedMessage())) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        //判断签名
+
+        //
+        if (userRepository.findByAddress(user.getAddress()).size() > 0) {
+            result.setMessage("This address has been registered!");
+            return result;
+        }
+        user.setReferCode(RandomStringUtils.randomAlphanumeric(8));
+        User savedUser = userRepository.save(user);
+        result.setStatus(1);
+        result.setData(savedUser);
         return result;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setNickName(User user) {
         Result result = new Result();
-        User savedUser = userRepository.getOne(user.getId());
+        if (StringUtils.isBlank(user.getNickName()) || user.getId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
+        }
+        User savedUser = userRepository.findOne(user.getId());
         savedUser.setNickName(user.getNickName());
         User savedUserIn = userRepository.save(savedUser);
-        if (savedUserIn != null) {
-            result.setStatus(1);
-            result.setData(savedUserIn);
-            result.setMessage("User registry success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("User registry unsuccess!");
-        }
+        result.setStatus(1);
+        result.setData(savedUserIn);
         return result;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setAvatar(User user) {
         Result result = new Result();
-        User savedUser = userRepository.getOne(user.getId());
-        savedUser.setAvatar(user.getAvatar());
-        User savedUserIn = userRepository.save(savedUser);
-        if (savedUserIn != null) {
-            result.setStatus(1);
-            result.setData(savedUserIn);
-            result.setMessage("User registry success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("User registry unsuccess!");
+        if (StringUtils.isBlank(user.getNickName()) || user.getId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        User savedUser = userRepository.findOne(user.getId());
+        savedUser.setAvatar(user.getAvatar());
+        userRepository.save(savedUser);
+        result.setStatus(1);
+        result.setData(savedUser);
         return result;
     }
 
     @Override
     public Result getReferUrl(User user) {
         Result result = new Result();
-        User savedUser = userRepository.getOne(user.getId());
-        if (savedUser != null) {
-            result.setStatus(1);
-            result.setData(savedUser);
-            result.setMessage("User get success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("User get unsuccess!");
+        if (user.getId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        User savedUser = userRepository.findOne(user.getId());
+        int referCount = referRepository.countIdByReferCode(savedUser.getReferCode());
+        BigDecimal sumReferFee = referRepository.sumReferFeeByReferCode(savedUser.getReferCode());
+        GetReferUrlVo gruv = new GetReferUrlVo();
+        gruv.setReferCode(savedUser.getReferCode());
+        gruv.setReferCount(referCount);
+        gruv.setSumReferFee(sumReferFee);
+        result.setStatus(1);
+        result.setData(gruv);
         return result;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result setName(Fishery fishery) {
+        Result result = new Result();
+        if (StringUtils.isBlank(fishery.getName()) || fishery.getId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
+        }
+        Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
+        savedFishery.setName(fishery.getName());
+        fisheryRepository.save(savedFishery);
+        result.setStatus(1);
+        result.setData(savedFishery);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result bind(Fishery fishery) {
         Result result = new Result();
-        Fishery savedFishery = fisheryRepository.getOne(fishery.getId());
-        savedFishery.setBindAddress(fishery.getBindAddress());
-        Fishery savedFisheryIn = fisheryRepository.save(savedFishery);
-        if (savedFisheryIn != null) {
-            result.setStatus(1);
-            result.setData(savedFisheryIn);
-            result.setMessage("Fishry bind success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Fishry bind unsuccess!");
+        if (StringUtils.isBlank(fishery.getBindAddress()) || fishery.getId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
+        savedFishery.setBindAddress(fishery.getBindAddress());
+        if (StringUtils.isBlank(savedFishery.getBindAddress())) {
+            savedFishery.setBindStatus("first binding");
+        } else {
+            savedFishery.setBindStatus("binding");
+        }
+        Fishery savedFisheryIn = fisheryRepository.save(savedFishery);
+        result.setStatus(1);
+        result.setData(savedFisheryIn);
         return result;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result unbind(Fishery fishery) {
         Result result = new Result();
-        Fishery savedFishery = fisheryRepository.getOne(fishery.getId());
-        savedFishery.setBindAddress(null);
-        Fishery savedFisheryIn = fisheryRepository.save(savedFishery);
-        if (savedFisheryIn != null) {
-            result.setStatus(1);
-            result.setData(savedFisheryIn);
-            result.setMessage("Fishry unbind success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Fishry unbind unsuccess!");
+        if (fishery.getId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
+        savedFishery.setBindStatus("unbinding");
+        fisheryRepository.save(savedFishery);
+        result.setStatus(1);
+        result.setData(savedFishery);
         return result;
     }
 
     @Override
-    public Result sell(Fishery fishery) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result sell(Market market) {
         Result result = new Result();
-        Fishery savedFishery = fisheryRepository.getOne(fishery.getId());
-        savedFishery.setSellStatus(1);
-        Fishery savedFisheryIn = fisheryRepository.save(savedFishery);
-        if (savedFisheryIn != null) {
-            result.setStatus(1);
-            result.setData(savedFisheryIn);
-            result.setMessage("Fishry sell success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Fishry sell unsuccess!");
+        if (market.getFisheryId() == 0 || market.getStartPrice() == null || market.getStopPrice() == null || market.getSellDuration() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        Fishery savedFishery = fisheryRepository.findOne(market.getFisheryId());
+        if (savedFishery.getSellStatus().equals("selling")) {
+            result.setMessage("The Fishery is selling in market!");
+            return result;
+        }
+        savedFishery.setSellStatus("selling");
+        fisheryRepository.save(savedFishery);
+        market.setSellStatus("selling");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long currentTime = System.currentTimeMillis();
+        market.setSellStartTime(df.format(currentTime));
+        market.setFavorCount(0);
+        Market savedMarket = marketRepository.save(market);
+        result.setStatus(1);
+        result.setData(savedMarket);
         return result;
     }
 
     @Override
-    public Result unsell(Fishery fishery) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result unsell(Market market) {
         Result result = new Result();
-        Fishery savedFishery = fisheryRepository.getOne(fishery.getId());
-        savedFishery.setSellStatus(0);
-        Fishery savedFisheryIn = fisheryRepository.save(savedFishery);
-        if (savedFisheryIn != null) {
-            result.setStatus(1);
-            result.setData(savedFisheryIn);
-            result.setMessage("Fishry sell success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Fishry sell unsuccess!");
+        if (market.getFisheryId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        Fishery savedFishery = fisheryRepository.findOne(market.getFisheryId());
+        if (savedFishery.getSellStatus().equals("unselled")) {
+            result.setMessage("The Fishery is unselled in market!");
+            return result;
+        }
+        savedFishery.setSellStatus("unselled");
+        fisheryRepository.save(savedFishery);
+        marketRepository.deleteAllByFisheryId(market.getFisheryId());
+        result.setStatus(1);
+        result.setData(savedFishery);
         return result;
     }
 
     @Override
-    public Result buy(Market market) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result buy(Fishery fishery,Refer refer) {
         Result result = new Result();
-        Market savedMarket = marketRepository.getOne(market.getId());
-      //
-        if (savedMarket != null) {
-            result.setStatus(1);
-            result.setData(savedMarket);
-            result.setMessage("Market buy success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Market buy unsuccess!");
+        if (fishery.getId() == 0 || fishery.getUserId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        if(StringUtils.isNotBlank(refer.getReferCode())){
+            refer.setStatus("buy");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            long currentTime = System.currentTimeMillis();
+            refer.setCreateTime(df.format(currentTime));
+            referRepository.save(refer);
+        }
+        Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
+        savedFishery.setSellStatus("");
+        savedFishery.setUserId(fishery.getUserId());
+        fisheryRepository.save(savedFishery);
+        marketRepository.deleteAllByFisheryId(fishery.getId());
+        result.setStatus(1);
+        result.setData(savedFishery);
         return result;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result favor(Market market) {
         Result result = new Result();
-        Market savedMarket = marketRepository.getOne(market.getId());
-        savedMarket.setFavorCount(savedMarket.getFavorCount()+1);
-        Market savedMarketIn = marketRepository.save(savedMarket);
-        if (savedMarketIn != null) {
-            result.setStatus(1);
-            result.setData(savedMarket);
-            result.setMessage("Market buy success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Market buy unsuccess!");
+        if (market.getId() == 0) {
+            result.setMessage("The required parameters are empty!");
+            return result;
         }
+        Market savedMarket = marketRepository.findOne(market.getId());
+        savedMarket.setFavorCount(savedMarket.getFavorCount() + 1);
+        marketRepository.save(savedMarket);
+        result.setStatus(1);
+        result.setData(savedMarket);
         return result;
     }
 
@@ -202,61 +257,16 @@ public class OneServiceImpl implements OneService {
     public Result query(Opslog opslog) {
         Result result = new Result();
         List<Opslog> opslogList = opslogRepository.findByUserId(opslog.getUserId());
-        if (opslogList != null) {
-            result.setStatus(1);
-            result.setData(opslogList);
-            result.setMessage("Opslog query success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Opslog query unsuccess!");
-        }
+        result.setStatus(1);
+        result.setData(opslogList);
         return result;
     }
 
     @Override
-    public Result record(Refer refer) {
-        Result result = new Result();
-        Refer savedRefer = referRepository.save(refer);
-        if (savedRefer != null) {
-            result.setStatus(1);
-            result.setData(savedRefer);
-            result.setMessage("Fishry sell success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Fishry sell unsuccess!");
-        }
-        return result;
+    public void createLog(Opslog opslog) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long currentTime = System.currentTimeMillis();
+        opslog.setActionTime(df.format(currentTime));
+        opslogRepository.save(opslog);
     }
-
-    @Override
-    public Result queryCount(Refer refer) {
-        Result result = new Result();
-        List<Refer> referList = referRepository.findByReferCode(refer.getReferCode());
-        if (referList != null) {
-            result.setStatus(1);
-            result.setData(referList.size());
-            result.setMessage("Opslog query success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Opslog query unsuccess!");
-        }
-        return result;
-    }
-
-    @Override
-    public Result queryFees(Refer refer) {
-        Result result = new Result();
-        BigDecimal srfv = referRepository.countSumByReferCode(refer.getReferCode());
-        if (srfv != null) {
-            result.setStatus(1);
-            result.setData(srfv);
-            result.setMessage("Refer queryfee success!");
-        } else {
-            result.setStatus(0);
-            result.setMessage("Refer queryfee unsuccess!");
-        }
-        return result;
-    }
-
-
 }

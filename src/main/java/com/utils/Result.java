@@ -6,10 +6,6 @@ public class Result {
     private Object data;
     private String message;
 
-    public Result() {
-        this.status = 1;
-    }
-
     public Object getData() {
         return data;
     }

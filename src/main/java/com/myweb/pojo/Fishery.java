@@ -1,21 +1,20 @@
 package com.myweb.pojo;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Fishery {
     private int id;
     private String name;
-    private String owner;
+    private Integer userId;
     private String bindStatus;
     private String bindAddress;
-    private Integer sellStatus;
+    private String sellStatus;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -25,7 +24,7 @@ public class Fishery {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 255)
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -35,17 +34,17 @@ public class Fishery {
     }
 
     @Basic
-    @Column(name = "owner", nullable = true, length = 255)
-    public String getOwner() {
-        return owner;
+    @Column(name = "user_id")
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     @Basic
-    @Column(name = "bind_status", nullable = true, length = 255)
+    @Column(name = "bind_status")
     public String getBindStatus() {
         return bindStatus;
     }
@@ -55,7 +54,7 @@ public class Fishery {
     }
 
     @Basic
-    @Column(name = "bind_address", nullable = true, length = 255)
+    @Column(name = "bind_address")
     public String getBindAddress() {
         return bindAddress;
     }
@@ -65,12 +64,12 @@ public class Fishery {
     }
 
     @Basic
-    @Column(name = "sell_status", nullable = true)
-    public Integer getSellStatus() {
+    @Column(name = "sell_status")
+    public String getSellStatus() {
         return sellStatus;
     }
 
-    public void setSellStatus(Integer sellStatus) {
+    public void setSellStatus(String sellStatus) {
         this.sellStatus = sellStatus;
     }
 
@@ -78,27 +77,18 @@ public class Fishery {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Fishery fishery = (Fishery) o;
-
-        if (id != fishery.id) return false;
-        if (name != null ? !name.equals(fishery.name) : fishery.name != null) return false;
-        if (owner != null ? !owner.equals(fishery.owner) : fishery.owner != null) return false;
-        if (bindStatus != null ? !bindStatus.equals(fishery.bindStatus) : fishery.bindStatus != null) return false;
-        if (bindAddress != null ? !bindAddress.equals(fishery.bindAddress) : fishery.bindAddress != null) return false;
-        if (sellStatus != null ? !sellStatus.equals(fishery.sellStatus) : fishery.sellStatus != null) return false;
-
-        return true;
+        return id == fishery.id &&
+                Objects.equals(name, fishery.name) &&
+                Objects.equals(userId, fishery.userId) &&
+                Objects.equals(bindStatus, fishery.bindStatus) &&
+                Objects.equals(bindAddress, fishery.bindAddress) &&
+                Objects.equals(sellStatus, fishery.sellStatus);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (owner != null ? owner.hashCode() : 0);
-        result = 31 * result + (bindStatus != null ? bindStatus.hashCode() : 0);
-        result = 31 * result + (bindAddress != null ? bindAddress.hashCode() : 0);
-        result = 31 * result + (sellStatus != null ? sellStatus.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, name, userId, bindStatus, bindAddress, sellStatus);
     }
 }

@@ -10,24 +10,30 @@ repositories {
         url "http://maven.aliyun.com/nexus/content/groups/public/"
     }
     mavenLocal()
+
     mavenCentral()
 }
 
 buildscript {
     repositories {
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public/"
+        }
         mavenLocal()
         mavenCentral()
     }
     dependencies {
         classpath 'io.spring.gradle:dependency-management-plugin:1.0.0.RELEASE'
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE')
     }
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Brussels-SR4'
+        mavenBom 'io.spring.platform:platform-bom:Brussels-SR7'
     }
 }
 

@@ -1,9 +1,7 @@
 package com.myweb.pojo;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Opslog {
@@ -15,7 +13,8 @@ public class Opslog {
     private String actionTime;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -25,7 +24,7 @@ public class Opslog {
     }
 
     @Basic
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     public int getUserId() {
         return userId;
     }
@@ -35,7 +34,7 @@ public class Opslog {
     }
 
     @Basic
-    @Column(name = "action", nullable = true, length = 255)
+    @Column(name = "action")
     public String getAction() {
         return action;
     }
@@ -45,7 +44,7 @@ public class Opslog {
     }
 
     @Basic
-    @Column(name = "txhash", nullable = true, length = 255)
+    @Column(name = "txhash")
     public String getTxhash() {
         return txhash;
     }
@@ -55,7 +54,7 @@ public class Opslog {
     }
 
     @Basic
-    @Column(name = "memo", nullable = true, length = 255)
+    @Column(name = "memo")
     public String getMemo() {
         return memo;
     }
@@ -65,7 +64,7 @@ public class Opslog {
     }
 
     @Basic
-    @Column(name = "action_time", nullable = true, length = 0)
+    @Column(name = "action_time")
     public String getActionTime() {
         return actionTime;
     }
@@ -78,27 +77,18 @@ public class Opslog {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Opslog opslog = (Opslog) o;
-
-        if (id != opslog.id) return false;
-        if (userId != opslog.userId) return false;
-        if (action != null ? !action.equals(opslog.action) : opslog.action != null) return false;
-        if (txhash != null ? !txhash.equals(opslog.txhash) : opslog.txhash != null) return false;
-        if (memo != null ? !memo.equals(opslog.memo) : opslog.memo != null) return false;
-        if (actionTime != null ? !actionTime.equals(opslog.actionTime) : opslog.actionTime != null) return false;
-
-        return true;
+        return id == opslog.id &&
+                userId == opslog.userId &&
+                Objects.equals(action, opslog.action) &&
+                Objects.equals(txhash, opslog.txhash) &&
+                Objects.equals(memo, opslog.memo) &&
+                Objects.equals(actionTime, opslog.actionTime);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + userId;
-        result = 31 * result + (action != null ? action.hashCode() : 0);
-        result = 31 * result + (txhash != null ? txhash.hashCode() : 0);
-        result = 31 * result + (memo != null ? memo.hashCode() : 0);
-        result = 31 * result + (actionTime != null ? actionTime.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, userId, action, txhash, memo, actionTime);
     }
 }

@@ -11,4 +11,5 @@ import java.util.List;
 @RepositoryDefinition(domainClass = User.class, idClass = Integer.class)
 public interface UserRepository extends JpaRepository<User,Integer> {
 
+    public List<User> findByAddress(String address);
 }

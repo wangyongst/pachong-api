@@ -1,22 +1,21 @@
 package com.myweb.pojo;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Refer {
     private int id;
     private String txhash;
     private String referCode;
-    private Integer status;
+    private String status;
     private String createTime;
     private BigDecimal referFee;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -26,7 +25,7 @@ public class Refer {
     }
 
     @Basic
-    @Column(name = "txhash", nullable = true, length = 255)
+    @Column(name = "txhash")
     public String getTxhash() {
         return txhash;
     }
@@ -36,7 +35,7 @@ public class Refer {
     }
 
     @Basic
-    @Column(name = "refer_code", nullable = true, length = 255)
+    @Column(name = "refer_code")
     public String getReferCode() {
         return referCode;
     }
@@ -46,17 +45,17 @@ public class Refer {
     }
 
     @Basic
-    @Column(name = "status", nullable = true)
-    public Integer getStatus() {
+    @Column(name = "status")
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
     @Basic
-    @Column(name = "create_time", nullable = true, length = 255)
+    @Column(name = "create_time")
     public String getCreateTime() {
         return createTime;
     }
@@ -66,7 +65,7 @@ public class Refer {
     }
 
     @Basic
-    @Column(name = "refer_fee", nullable = true, precision = 2)
+    @Column(name = "refer_fee")
     public BigDecimal getReferFee() {
         return referFee;
     }
@@ -79,27 +78,18 @@ public class Refer {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        com.myweb.pojo.Refer refer = (com.myweb.pojo.Refer) o;
-
-        if (id != refer.id) return false;
-        if (txhash != null ? !txhash.equals(refer.txhash) : refer.txhash != null) return false;
-        if (referCode != null ? !referCode.equals(refer.referCode) : refer.referCode != null) return false;
-        if (status != null ? !status.equals(refer.status) : refer.status != null) return false;
-        if (createTime != null ? !createTime.equals(refer.createTime) : refer.createTime != null) return false;
-        if (referFee != null ? !referFee.equals(refer.referFee) : refer.referFee != null) return false;
-
-        return true;
+        Refer refer = (Refer) o;
+        return id == refer.id &&
+                Objects.equals(txhash, refer.txhash) &&
+                Objects.equals(referCode, refer.referCode) &&
+                Objects.equals(status, refer.status) &&
+                Objects.equals(createTime, refer.createTime) &&
+                Objects.equals(referFee, refer.referFee);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (txhash != null ? txhash.hashCode() : 0);
-        result = 31 * result + (referCode != null ? referCode.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (referFee != null ? referFee.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, txhash, referCode, status, createTime, referFee);
     }
 }

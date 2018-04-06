@@ -1,9 +1,7 @@
 package com.myweb.pojo;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -16,7 +14,8 @@ public class User {
     private String referCode;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -26,7 +25,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "address", nullable = true, length = 255)
+    @Column(name = "address")
     public String getAddress() {
         return address;
     }
@@ -36,7 +35,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "sign_message", nullable = true, length = 255)
+    @Column(name = "sign_message")
     public String getSignMessage() {
         return signMessage;
     }
@@ -46,7 +45,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "signed_message", nullable = true, length = 255)
+    @Column(name = "signed_message")
     public String getSignedMessage() {
         return signedMessage;
     }
@@ -56,7 +55,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "nick_name", nullable = true, length = 255)
+    @Column(name = "nick_name")
     public String getNickName() {
         return nickName;
     }
@@ -66,7 +65,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "avatar", nullable = true, length = 255)
+    @Column(name = "avatar")
     public String getAvatar() {
         return avatar;
     }
@@ -76,7 +75,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "refer_code", nullable = true, length = 255)
+    @Column(name = "refer_code")
     public String getReferCode() {
         return referCode;
     }
@@ -89,29 +88,19 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         User user = (User) o;
-
-        if (id != user.id) return false;
-        if (address != null ? !address.equals(user.address) : user.address != null) return false;
-        if (signMessage != null ? !signMessage.equals(user.signMessage) : user.signMessage != null) return false;
-        if (signedMessage != null ? !signedMessage.equals(user.signedMessage) : user.signedMessage != null) return false;
-        if (nickName != null ? !nickName.equals(user.nickName) : user.nickName != null) return false;
-        if (avatar != null ? !avatar.equals(user.avatar) : user.avatar != null) return false;
-        if (referCode != null ? !referCode.equals(user.referCode) : user.referCode != null) return false;
-
-        return true;
+        return id == user.id &&
+                Objects.equals(address, user.address) &&
+                Objects.equals(signMessage, user.signMessage) &&
+                Objects.equals(signedMessage, user.signedMessage) &&
+                Objects.equals(nickName, user.nickName) &&
+                Objects.equals(avatar, user.avatar) &&
+                Objects.equals(referCode, user.referCode);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (signMessage != null ? signMessage.hashCode() : 0);
-        result = 31 * result + (signedMessage != null ? signedMessage.hashCode() : 0);
-        result = 31 * result + (nickName != null ? nickName.hashCode() : 0);
-        result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
-        result = 31 * result + (referCode != null ? referCode.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, address, signMessage, signedMessage, nickName, avatar, referCode);
     }
 }

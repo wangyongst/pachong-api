@@ -4,11 +4,14 @@ import com.myweb.pojo.*;
 import com.myweb.service.OneService;
 import com.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yaml.snakeyaml.error.Mark;
 
 @Controller
 public class OneController {
@@ -24,18 +27,20 @@ public class OneController {
     }
 
     //设置昵称
+    @ResponseBody
     @RequestMapping(value = "/user/setNickName", method = RequestMethod.POST)
     public Result setNickName(@ModelAttribute User user) {
         return oneService.setNickName(user);
     }
 
     //设置头像
+    @ResponseBody
     @RequestMapping(value = "/user/setAvatar", method = RequestMethod.POST)
     public Result setAvatar(@ModelAttribute User user) {
         return oneService.setAvatar(user);
     }
 
-    //获取推荐码
+    //获取推荐码生成推荐事件
     @ResponseBody
     @RequestMapping(value = "/user/getReferUrl", method = RequestMethod.GET)
     public Result getReferUrl(@ModelAttribute User user) {
@@ -45,42 +50,63 @@ public class OneController {
     //绑定游戏地址
     @ResponseBody
     @RequestMapping(value = "/fishery/bind", method = RequestMethod.POST)
-    public Result bind(@ModelAttribute Fishery fishery) {
+    public Result bind(@ModelAttribute Fishery fishery,@ModelAttribute Opslog opslog) {
+        opslog.setAction("绑定游戏地址");
+        oneService.createLog(opslog);
         return oneService.bind(fishery);
+    }
+
+    //设置渔场名称
+    @ResponseBody
+    @RequestMapping(value = "/fishery/setName", method = RequestMethod.POST)
+    public Result setName(@ModelAttribute Fishery fishery,@ModelAttribute Opslog opslog) {
+        opslog.setAction("设置渔场名称");
+        oneService.createLog(opslog);
+        return oneService.setName(fishery);
     }
 
     //取消绑定
     @ResponseBody
     @RequestMapping(value = "/fishery/unbind", method = RequestMethod.POST)
-    public Result unbind(@ModelAttribute Fishery fishery) {
+    public Result unbind(@ModelAttribute Fishery fishery,@ModelAttribute Opslog opslog) {
+        opslog.setAction("取消绑定");
+        oneService.createLog(opslog);
         return oneService.unbind(fishery);
     }
 
     //出售
     @ResponseBody
     @RequestMapping(value = "/fishery/sell", method = RequestMethod.POST)
-    public Result sell(@ModelAttribute Fishery fishery, @ModelAttribute Market market) {
-        return oneService.sell(fishery);
+    public Result sell(@ModelAttribute Market market,@ModelAttribute Opslog opslog) {
+        opslog.setAction("出售");
+        oneService.createLog(opslog);
+        return oneService.sell(market);
     }
 
     //取消绑定
     @ResponseBody
     @RequestMapping(value = "/fishery/unsell", method = RequestMethod.POST)
-    public Result unsell(@ModelAttribute Fishery fishery) {
-        return oneService.unsell(fishery);
+    public Result unsell(@ModelAttribute Market market,@ModelAttribute Opslog opslog) {
+        opslog.setAction("取消绑定");
+        oneService.createLog(opslog);
+        return oneService.unsell(market);
     }
 
     //购买渔场
     @ResponseBody
     @RequestMapping(value = "/market/buy", method = RequestMethod.POST)
-    public Result buy(@ModelAttribute Market market) {
-        return oneService.buy(market);
+    public Result buy(@ModelAttribute Fishery fishery,@ModelAttribute Refer refer,@ModelAttribute Opslog opslog) {
+        opslog.setAction("购买渔场");
+        oneService.createLog(opslog);
+        return oneService.buy(fishery,refer);
     }
 
     //赞
     @ResponseBody
     @RequestMapping(value = "/market/favor", method = RequestMethod.POST)
-    public Result favor(@ModelAttribute Market market) {
+    public Result favor(@ModelAttribute Market market,@ModelAttribute Opslog opslog) {
+        opslog.setAction("赞");
+        oneService.createLog(opslog);
         return oneService.favor(market);
     }
 
@@ -88,28 +114,7 @@ public class OneController {
     @ResponseBody
     @RequestMapping(value = "/opslog/query", method = RequestMethod.GET)
     public Result query(@ModelAttribute Opslog opslog) {
+        //Pageable pageable = new PageRequest(page, size, sort);
         return oneService.query(opslog);
-    }
-
-
-    //记录推荐成功事件
-    @ResponseBody
-    @RequestMapping(value = "/refer/record", method = RequestMethod.POST)
-    public Result record(@ModelAttribute Refer refer) {
-        return oneService.record(refer);
-    }
-
-    //查询推荐的总数量
-    @ResponseBody
-    @RequestMapping(value = "/refer/queryCount", method = RequestMethod.GET)
-    public Result queryCount(@ModelAttribute Refer refer) {
-        return oneService.queryCount(refer);
-    }
-
-    //查询推荐费总和
-    @ResponseBody
-    @RequestMapping(value = "/refer/queryFees", method = RequestMethod.GET)
-    public Result queryFees(@ModelAttribute Refer refer) {
-        return oneService.queryFees(refer);
     }
 }

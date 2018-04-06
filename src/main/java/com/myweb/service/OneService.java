@@ -14,23 +14,22 @@ public interface OneService {
 
     public Result getReferUrl(User user);
 
+    public Result setName(Fishery fishery);
+
     public Result bind(Fishery fishery);
 
     public Result unbind(Fishery fishery);
 
-    public Result sell(Fishery fishery);
+    public Result sell(Market market);
 
-    public Result unsell(Fishery fishery);
+    public Result unsell(Market market);
 
-    public Result buy(Market market);
+    public Result buy(Fishery fishery,Refer refer);
 
     public Result favor(Market market);
 
     public Result query(Opslog opslog);
 
-    public Result record(Refer refer);
+    public void createLog(Opslog opslog);
 
-    public Result queryCount(Refer refer);
-
-    public Result queryFees(Refer refer);
 }
