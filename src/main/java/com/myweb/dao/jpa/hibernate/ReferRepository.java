@@ -13,8 +13,7 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Refer.class, idClass = Integer.class)
 public interface ReferRepository extends JpaRepository<Refer, Integer> {
 
-    @Query("select count(refer.id) from Refer refer where refer.referCode = ?1")
-    public int countIdByReferCode(String referCode);
+    public int countAllByReferCode(String referCode);
 
     @Query("select sum(refer.referFee) from Refer refer where refer.referCode = ?1")
     public BigDecimal sumReferFeeByReferCode(String referCode);

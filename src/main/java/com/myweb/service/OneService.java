@@ -4,6 +4,7 @@ package com.myweb.service;
 import com.myweb.pojo.*;
 import com.utils.Result;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface OneService {
@@ -12,7 +13,7 @@ public interface OneService {
 
     public Result setNickName(User user);
 
-    public Result setAvatar(User user);
+    public Result setAvatar(MultipartFile multipartFile, User user);
 
     public Result getReferUrl(User user);
 
@@ -30,10 +31,9 @@ public interface OneService {
 
     public Result favor(Market market);
 
-    public Result query(Opslog opslog,PageRequest pageRequest);
+   // public Result queryCount(Opslog opslog);
 
-    public void createLog(Opslog opslog);
+    public Result query(Opslog opslog,Pageable pageable);
 
-    public Result uploadAvatar(MultipartFile multipartFile);
-
+    public Result createLog(Opslog opslog);
 }

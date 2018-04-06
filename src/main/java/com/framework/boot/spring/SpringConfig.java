@@ -22,46 +22,34 @@ import javax.servlet.MultipartConfigElement;
 import java.util.List;
 
 @Configuration
-@ComponentScan(basePackages = { "com.framework", "com.myweb" })
+@ComponentScan(basePackages = {"com.framework", "com.myweb"})
 @EnableWebMvc
-@PropertySource({"classpath:/properties/application.properties"})
 @Order(4)
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
-	private static final Logger logger = LogManager.getLogger(SpringConfig.class);
+    private static final Logger logger = LogManager.getLogger(SpringConfig.class);
 
 
-	/**
-	 * 在配置文件中配置的文件保存路径
-	 */
-	@Value("${img.location}")
-	private String location;
+    /**
+     * 在配置文件中配置的文件保存路径
+     */
+    @Value("${img.location}")
+    private String location;
 
-	@Bean
-	public ViewResolver viewResolver() {
-		logger.info("ViewResolver create!");
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix("/jsp/");
-		viewResolver.setSuffix(".jsp");
-		viewResolver.setViewClass(JstlView.class);
-		return viewResolver;
-	}
+    @Bean
+    public ViewResolver viewResolver() {
+        logger.info("ViewResolver create!");
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/jsp/");
+        viewResolver.setSuffix(".jsp");
+        viewResolver.setViewClass(JstlView.class);
+        return viewResolver;
+    }
 
-	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		logger.info("ConfigureMessageConverters create!");
-		Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()	.indentOutput(true);
-		converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
-	}
-
-	@Bean
-	public MultipartConfigElement multipartConfigElement(){
-		MultipartConfigFactory factory = new MultipartConfigFactory();
-		//文件最大KB,MB
-		factory.setMaxFileSize("2MB");
-		//设置总上传数据总大小
-		factory.setMaxRequestSize("10MB");
-		return factory.createMultipartConfig();
-	}
-
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        logger.info("ConfigureMessageConverters create!");
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder().indentOutput(true);
+        converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+    }
 }
