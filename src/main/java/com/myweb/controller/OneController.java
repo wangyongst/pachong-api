@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.yaml.snakeyaml.error.Mark;
 
+@CrossOrigin("*")
 @Controller
 public class OneController {
 
