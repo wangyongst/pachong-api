@@ -57,7 +57,6 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         //判断签名
-
         //
         if (userRepository.findByAddress(user.getAddress()).size() > 0) {
             result.setMessage("This address has been registered!");
@@ -74,11 +73,16 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setNickName(User user) {
         Result result = new Result();
-        if (StringUtils.isBlank(user.getNickName()) || user.getId() == 0) {
+        if (StringUtils.isBlank(user.getNickName()) || StringUtils.isBlank(user.getAddress())) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
-        User savedUser = userRepository.findOne(user.getId());
+        List<User> userList =  userRepository.findByAddress(user.getAddress());
+        if(userList.size() == 0 || userList.size() > 1){
+            result.setMessage("The user cant be found!");
+            return result;
+        }
+        User savedUser = userList.get(0);
         savedUser.setNickName(user.getNickName());
         User savedUserIn = userRepository.save(savedUser);
         result.setStatus(1);
@@ -90,7 +94,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setAvatar(MultipartFile multipartFile, User user) {
         Result result = new Result();
-        if (multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename()) || user.getId() == 0) {
+        if (multipartFile == null || multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename()) || StringUtils.isBlank(user.getAddress())) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
@@ -105,8 +109,13 @@ public class OneServiceImpl implements OneService {
         try {
             fileNameIn = saveImg(multipartFile, fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()));
             if (StringUtils.isNotBlank(fileNameIn)) {
-                User savedUser = userRepository.findOne(user.getId());
-                savedUser.setAvatar(location + File.separator + fileNameIn);
+                List<User> userList =  userRepository.findByAddress(user.getAddress());
+                if(userList.size() == 0 || userList.size() > 1){
+                    result.setMessage("The user cant be found!");
+                    return result;
+                }
+                User savedUser = userList.get(0);
+                savedUser.setAvatar(fileNameIn);
                 userRepository.save(savedUser);
                 result.setStatus(1);
                 result.setData(savedUser);
@@ -121,15 +130,16 @@ public class OneServiceImpl implements OneService {
     @Override
     public Result getReferUrl(User user) {
         Result result = new Result();
-        if (user.getId() == 0) {
+        if (StringUtils.isBlank(user.getAddress())) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
-        User savedUser = userRepository.findOne(user.getId());
-        if (savedUser == null) {
-            result.setMessage("The User cant be found!");
+        List<User> userList =  userRepository.findByAddress(user.getAddress());
+        if(userList.size() == 0 || userList.size() > 1){
+            result.setMessage("The user cant be found!");
             return result;
         }
+        User savedUser = userList.get(0);
         GetReferUrlVo gruv = new GetReferUrlVo();
         gruv.setReferCode(savedUser.getReferCode());
         gruv.setReferCount(referRepository.countAllByReferCode(savedUser.getReferCode()));
@@ -264,7 +274,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result buy(Fishery fishery, Refer refer) {
         Result result = new Result();
-        if (fishery.getId() == 0 || fishery.getUserId() == 0) {
+        if (fishery.getId() == 0 || StringUtils.isBlank(fishery.getAddress())) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
@@ -287,7 +297,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         savedFishery.setSellStatus(null);
-        savedFishery.setUserId(fishery.getUserId());
+        savedFishery.setAddress(fishery.getAddress());
         fisheryRepository.save(savedFishery);
         marketRepository.deleteAllByFisheryId(fishery.getId());
         result.setStatus(1);
@@ -318,11 +328,11 @@ public class OneServiceImpl implements OneService {
     @Override
     public Result query(Opslog opslog, Pageable pageable) {
         Result result = new Result();
-        if (opslog.getUserId() == 0) {
+        if (StringUtils.isBlank(opslog.getAddress())) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
-        Page<Opslog> opslogPage = opslogRepository.findAllByUserId(opslog.getUserId(), pageable);
+        Page<Opslog> opslogPage = opslogRepository.findAllByAddress(opslog.getAddress(), pageable);
         result.setStatus(1);
         result.setData(opslogPage);
         return result;
@@ -332,7 +342,7 @@ public class OneServiceImpl implements OneService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result createLog(Opslog opslog) {
         Result result = new Result();
-        if (opslog.getUserId() == 0) {
+        if (StringUtils.isBlank(opslog.getAddress())) {
             result.setMessage("The required parameters are empty!");
             return result;
         }

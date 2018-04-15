@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2018-04-06 17:21:01
+Date: 2018-04-15 15:50:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `fishery`;
 CREATE TABLE `fishery` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
   `bind_status` varchar(255) DEFAULT NULL,
   `bind_address` varchar(255) DEFAULT NULL,
   `sell_status` varchar(255) DEFAULT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE `fishery` (
 -- ----------------------------
 -- Records of fishery
 -- ----------------------------
-INSERT INTO `fishery` VALUES ('1', 'comesdf', '1', 'unbinding', 'comesdf', 'selling');
+INSERT INTO `fishery` VALUES ('1', 'dfdfdf', '1', 'unbinding', 'comesdf', 'selling');
 
 -- ----------------------------
 -- Table structure for market
@@ -49,12 +49,12 @@ CREATE TABLE `market` (
   `static_price` decimal(10,2) DEFAULT NULL,
   `favor_count` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of market
 -- ----------------------------
-INSERT INTO `market` VALUES ('2', '1', 'selling', '10.01', '11.55', '8000', '2018-04-06 15:20:49', null, '11');
+INSERT INTO `market` VALUES ('3', '1', 'selling', '10.01', '11.55', '8000', '2018-04-15 15:26:11', null, '0');
 
 -- ----------------------------
 -- Table structure for opslog
@@ -62,13 +62,13 @@ INSERT INTO `market` VALUES ('2', '1', 'selling', '10.01', '11.55', '8000', '201
 DROP TABLE IF EXISTS `opslog`;
 CREATE TABLE `opslog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
+  `address` varchar(255) NOT NULL,
   `action` varchar(255) DEFAULT NULL,
   `txhash` varchar(255) DEFAULT NULL,
   `memo` varchar(255) DEFAULT NULL,
   `action_time` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of opslog
@@ -116,6 +116,23 @@ INSERT INTO `opslog` VALUES ('40', '1', '赞', null, null, '2018-04-06 15:21:10'
 INSERT INTO `opslog` VALUES ('41', '1', '赞', null, null, '2018-04-06 15:21:11');
 INSERT INTO `opslog` VALUES ('42', '1', '赞', null, null, '2018-04-06 15:21:11');
 INSERT INTO `opslog` VALUES ('43', '1', '赞', null, null, '2018-04-06 15:21:11');
+INSERT INTO `opslog` VALUES ('44', '1', '设置渔场名称', 'ok', 'good', '2018-04-15 14:51:16');
+INSERT INTO `opslog` VALUES ('45', '221112', '设置渔场名称', 'ok', 'good', '2018-04-15 14:51:30');
+INSERT INTO `opslog` VALUES ('46', '1', '设置渔场名称', 'ok', 'good', '2018-04-15 14:52:04');
+INSERT INTO `opslog` VALUES ('47', '221112', '设置渔场名称', 'ok', 'good', '2018-04-15 15:10:56');
+INSERT INTO `opslog` VALUES ('48', '221112', '设置渔场名称', 'ok', 'good', '2018-04-15 15:11:21');
+INSERT INTO `opslog` VALUES ('49', '221112', '设置渔场名称', 'ok', 'good', '2018-04-15 15:11:22');
+INSERT INTO `opslog` VALUES ('50', '221112', '设置渔场名称', 'ok', 'good', '2018-04-15 15:11:22');
+INSERT INTO `opslog` VALUES ('51', '221112', '设置渔场名称', 'ok', 'good', '2018-04-15 15:11:23');
+INSERT INTO `opslog` VALUES ('52', '221112', '设置渔场名称', 'ok', 'good', '2018-04-15 15:11:33');
+INSERT INTO `opslog` VALUES ('53', '221112', '绑定游戏地址', 'ok', 'good', '2018-04-15 15:12:16');
+INSERT INTO `opslog` VALUES ('54', '221112', '取消绑定', 'ok', 'good', '2018-04-15 15:12:36');
+INSERT INTO `opslog` VALUES ('55', '221112', '出售', 'ok', 'good', '2018-04-15 15:12:50');
+INSERT INTO `opslog` VALUES ('56', '221112', '取消出售', 'ok', 'good', '2018-04-15 15:13:05');
+INSERT INTO `opslog` VALUES ('57', '221112', '购买渔场', 'ok', 'good', '2018-04-15 15:13:18');
+INSERT INTO `opslog` VALUES ('58', '221112', '赞', null, null, '2018-04-15 15:13:32');
+INSERT INTO `opslog` VALUES ('59', '221112', '取消绑定', 'ok', 'good', '2018-04-15 15:25:53');
+INSERT INTO `opslog` VALUES ('60', '221112', '出售', 'ok', 'good', '2018-04-15 15:26:11');
 
 -- ----------------------------
 -- Table structure for refer
@@ -150,7 +167,7 @@ CREATE TABLE `user` (
   `avatar` varchar(255) DEFAULT NULL,
   `refer_code` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
@@ -166,3 +183,4 @@ INSERT INTO `user` VALUES ('9', '11111', '11111', '11111', null, null, 'VAMyknYJ
 INSERT INTO `user` VALUES ('10', '11111', '11111', '11111', null, null, 'NlfnHyqY');
 INSERT INTO `user` VALUES ('11', '111112', '11111', '11111', null, null, 'zliHOBBv');
 INSERT INTO `user` VALUES ('12', '222', '11111', '11111', 'come', null, 'kLTMoRMC');
+INSERT INTO `user` VALUES ('13', '221112', '11111', '11111', 'sscomse', 'HeAjJa6k.jpg', 'DgTWNrpq');

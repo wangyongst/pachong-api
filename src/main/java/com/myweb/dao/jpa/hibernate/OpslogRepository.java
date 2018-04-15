@@ -13,5 +13,5 @@ import java.util.List;
 @RepositoryDefinition(domainClass = Opslog.class, idClass = Integer.class)
 public interface OpslogRepository extends JpaRepository<Opslog, Integer> {
 
-    public Page<Opslog> findAllByUserId(Integer userId, Pageable pageable);
+    public Page<Opslog> findAllByAddress(String address, Pageable pageable);
 }

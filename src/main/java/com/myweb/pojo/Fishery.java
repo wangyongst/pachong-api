@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Fishery {
     private int id;
     private String name;
-    private Integer userId;
+    private String address;
     private String bindStatus;
     private String bindAddress;
     private String sellStatus;
@@ -34,13 +34,13 @@ public class Fishery {
     }
 
     @Basic
-    @Column(name = "user_id")
-    public Integer getUserId() {
-        return userId;
+    @Column(name = "address")
+    public String getAddress() {
+        return address;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setAddress(String userId) {
+        this.address = userId;
     }
 
     @Basic
@@ -80,7 +80,7 @@ public class Fishery {
         Fishery fishery = (Fishery) o;
         return id == fishery.id &&
                 Objects.equals(name, fishery.name) &&
-                Objects.equals(userId, fishery.userId) &&
+                Objects.equals(address, fishery.address) &&
                 Objects.equals(bindStatus, fishery.bindStatus) &&
                 Objects.equals(bindAddress, fishery.bindAddress) &&
                 Objects.equals(sellStatus, fishery.sellStatus);
@@ -89,6 +89,6 @@ public class Fishery {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, name, userId, bindStatus, bindAddress, sellStatus);
+        return Objects.hash(id, name, address, bindStatus, bindAddress, sellStatus);
     }
 }

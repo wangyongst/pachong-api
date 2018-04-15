@@ -6,7 +6,7 @@ import java.util.Objects;
 @Entity
 public class Opslog {
     private int id;
-    private int userId;
+    private String address;
     private String action;
     private String txhash;
     private String memo;
@@ -24,13 +24,13 @@ public class Opslog {
     }
 
     @Basic
-    @Column(name = "user_id")
-    public int getUserId() {
-        return userId;
+    @Column(name = "address")
+    public String getAddress() {
+        return address;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setAddress(String userId) {
+        this.address = userId;
     }
 
     @Basic
@@ -79,7 +79,7 @@ public class Opslog {
         if (o == null || getClass() != o.getClass()) return false;
         Opslog opslog = (Opslog) o;
         return id == opslog.id &&
-                userId == opslog.userId &&
+                address == opslog.address &&
                 Objects.equals(action, opslog.action) &&
                 Objects.equals(txhash, opslog.txhash) &&
                 Objects.equals(memo, opslog.memo) &&
@@ -89,6 +89,6 @@ public class Opslog {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, userId, action, txhash, memo, actionTime);
+        return Objects.hash(id, address, action, txhash, memo, actionTime);
     }
 }
