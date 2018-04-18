@@ -25,7 +25,7 @@ import java.util.List;
 
 @Service("OneService")
 @SuppressWarnings("All")
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 @PropertySource({"classpath:application.properties"})
 public class OneServiceImpl implements OneService {
 
@@ -49,7 +49,7 @@ public class OneServiceImpl implements OneService {
 
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    //@Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result registry(User user) {
         Result result = new Result();
         if (StringUtils.isBlank(user.getAddress()) || StringUtils.isBlank(user.getSignMessage()) || StringUtils.isBlank(user.getSignedMessage())) {
@@ -70,7 +70,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    // @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setNickName(User user) {
         Result result = new Result();
         if (StringUtils.isBlank(user.getNickName()) || StringUtils.isBlank(user.getAddress())) {
@@ -91,7 +91,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    //  @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setAvatar(MultipartFile multipartFile, User user) {
         Result result = new Result();
         if (multipartFile == null || multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename()) || StringUtils.isBlank(user.getAddress())) {
@@ -139,8 +139,8 @@ public class OneServiceImpl implements OneService {
             User user1 = new User();
             user1.setAddress(user.getAddress());
             user1.setReferCode(RandomStringUtils.randomAlphanumeric(8));
-            User savedUser1 = userRepository.save(user);
-           userList.add(savedUser1);
+            User savedUser1 = userRepository.save(user1);
+            userList.add(savedUser1);
         }
         User savedUser = userList.get(0);
         GetReferUrlVo gruv = new GetReferUrlVo();
@@ -153,7 +153,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    // @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setName(Fishery fishery) {
         Result result = new Result();
         if (StringUtils.isBlank(fishery.getName()) || fishery.getId() == 0) {
@@ -162,7 +162,10 @@ public class OneServiceImpl implements OneService {
         }
         Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
         if (savedFishery == null) {
+            savedFishery = new Fishery();
             savedFishery.setId(fishery.getId());
+            fisheryRepository.save(savedFishery);
+            savedFishery = fisheryRepository.findOne(fishery.getId());
         }
         savedFishery.setName(fishery.getName());
         fisheryRepository.save(savedFishery);
@@ -172,7 +175,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    // @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result bind(Fishery fishery) {
         Result result = new Result();
         if (StringUtils.isBlank(fishery.getBindAddress()) || fishery.getId() == 0) {
@@ -197,7 +200,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    //  @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result unbind(Fishery fishery) {
         Result result = new Result();
         if (fishery.getId() == 0) {
@@ -217,7 +220,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    //   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result sell(Market market) {
         Result result = new Result();
         if (market.getFisheryId() == null || market.getStartPrice() == null || market.getStopPrice() == null || market.getSellDuration() == 0) {
@@ -248,7 +251,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    //   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result unsell(Market market) {
         Result result = new Result();
         if (market.getFisheryId() == 0) {
@@ -266,25 +269,25 @@ public class OneServiceImpl implements OneService {
         }
         savedFishery.setSellStatus("unselled");
         fisheryRepository.save(savedFishery);
-        marketRepository.deleteAllByFisheryId(market.getFisheryId());
+        marketRepository.delete(marketRepository.findAllByFisheryId(savedFishery.getId()));
         result.setStatus(1);
         result.setData(savedFishery);
         return result;
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    //   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result buy(Fishery fishery, Refer refer) {
         Result result = new Result();
-        if (fishery.getId() == 0 || StringUtils.isBlank(fishery.getAddress())) {
+        if (fishery.getId() == 0) {
             result.setMessage("The required parameters are empty!");
             return result;
         }
         List marketList = marketRepository.findAllByFisheryId(fishery.getId());
         if (marketList.size() == 0) {
-           Fishery fishery1 = new Fishery();
-           fishery1.setId(fishery.getId());
-           fisheryRepository.save(fishery1);
+            Fishery fishery1 = new Fishery();
+            fishery1.setId(fishery.getId());
+            fisheryRepository.save(fishery1);
         }
         if (StringUtils.isNotBlank(refer.getReferCode())) {
             refer.setId(0);
@@ -302,14 +305,14 @@ public class OneServiceImpl implements OneService {
         savedFishery.setSellStatus(null);
         savedFishery.setAddress(fishery.getAddress());
         fisheryRepository.save(savedFishery);
-        marketRepository.deleteAllByFisheryId(fishery.getId());
+        marketRepository.delete(marketRepository.findAllByFisheryId(fishery.getId()));
         result.setStatus(1);
         result.setData(savedFishery);
         return result;
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    //   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result favor(Market market) {
         Result result = new Result();
         if (market.getId() == 0) {
@@ -358,7 +361,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+//    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result createLog(Opslog opslog) {
         Result result = new Result();
         if (StringUtils.isBlank(opslog.getAddress())) {

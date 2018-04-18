@@ -10,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.yaml.snakeyaml.error.Mark;
 
 @CrossOrigin("*")
 @Controller
@@ -67,7 +66,6 @@ public class OneController {
     public Result bind(@ModelAttribute Fishery fishery, @ModelAttribute Opslog opslog) {
         opslog.setAction("绑定游戏地址");
         Result result = oneService.createLog(opslog);
-        if (result.getStatus() == 0) return result;
         return oneService.bind(fishery);
     }
 
@@ -77,7 +75,6 @@ public class OneController {
     public Result setName(@ModelAttribute Fishery fishery, @ModelAttribute Opslog opslog) {
         opslog.setAction("设置渔场名称");
         Result result = oneService.createLog(opslog);
-        if (result.getStatus() == 0) return result;
         return oneService.setName(fishery);
     }
 
@@ -87,7 +84,6 @@ public class OneController {
     public Result unbind(@ModelAttribute Fishery fishery, @ModelAttribute Opslog opslog) {
         opslog.setAction("取消绑定");
         Result result = oneService.createLog(opslog);
-        if (result.getStatus() == 0) return result;
         return oneService.unbind(fishery);
     }
 
@@ -97,7 +93,6 @@ public class OneController {
     public Result sell(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
         opslog.setAction("出售");
         Result result = oneService.createLog(opslog);
-        if (result.getStatus() == 0) return result;
         return oneService.sell(market);
     }
 
@@ -107,7 +102,6 @@ public class OneController {
     public Result unsell(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
         opslog.setAction("取消出售");
         Result result = oneService.createLog(opslog);
-        if (result.getStatus() == 0) return result;
         return oneService.unsell(market);
     }
 
@@ -117,7 +111,6 @@ public class OneController {
     public Result buy(@ModelAttribute Fishery fishery, @ModelAttribute Refer refer, @ModelAttribute Opslog opslog) {
         opslog.setAction("购买渔场");
         Result result = oneService.createLog(opslog);
-        if (result.getStatus() == 0) return result;
         return oneService.buy(fishery, refer);
     }
 
@@ -127,7 +120,6 @@ public class OneController {
     public Result favor(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
         opslog.setAction("赞");
         Result result = oneService.createLog(opslog);
-        if (result.getStatus() == 0) return result;
         return oneService.favor(market);
     }
 

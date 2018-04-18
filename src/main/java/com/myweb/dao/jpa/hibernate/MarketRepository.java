@@ -10,7 +10,5 @@ import java.util.List;
 @Repository
 @RepositoryDefinition(domainClass = Market.class, idClass = Integer.class)
 public interface MarketRepository extends JpaRepository<Market, Integer> {
-    public void deleteAllByFisheryId(Integer fisheryId);
-
     public List<Market> findAllByFisheryId(Integer fisheryId);
 }

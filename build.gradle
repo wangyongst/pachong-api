@@ -7,44 +7,35 @@ apply plugin: 'maven'
 apply plugin: 'war'
 
 repositories {
-    maven {
-        url "http://maven.aliyun.com/nexus/content/groups/public/"
-    }
     mavenLocal()
-
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
     mavenCentral()
 }
 
 buildscript {
     repositories {
-        maven {
-            url "http://maven.aliyun.com/nexus/content/groups/public/"
-        }
         mavenLocal()
         mavenCentral()
     }
     dependencies {
         classpath 'io.spring.gradle:dependency-management-plugin:1.0.0.RELEASE'
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.10.RELEASE')
     }
 }
 
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'org.springframework.boot'
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Brussels-SR7'
+        mavenBom 'io.spring.platform:platform-bom:Brussels-SR4'
     }
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = "utf-8"
 
 dependencies {
-
 
     testCompile("junit:junit")
 
@@ -75,19 +66,4 @@ dependencies {
     compile('org.springframework.data:spring-data-jpa')
 
     compile('org.hibernate:hibernate-entitymanager')
-
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-
-    compile("org.springframework.boot:spring-boot-starter-web") {
-        exclude module: "spring-boot-starter-logging"
-    }
-    compile("org.springframework.boot:spring-boot-starter-log4j2")
-
-    compile("org.springframework.boot:spring-boot-devtools")
-
-    compile("org.apache.tomcat.embed:tomcat-embed-jasper")
-
-    compile("org.aspectj:aspectjweaver")
-
-   // compile ('org.web3j:core:3.3.1')
 }
