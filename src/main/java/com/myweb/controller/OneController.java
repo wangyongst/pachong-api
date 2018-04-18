@@ -47,6 +47,21 @@ public class OneController {
         return oneService.getReferUrl(user);
     }
 
+
+    //获取用户
+    @ResponseBody
+    @RequestMapping(value = "/user/get", method = RequestMethod.GET)
+    public Result get(@ModelAttribute User user) {
+        return oneService.get(user);
+    }
+
+    //获取用户
+    @ResponseBody
+    @RequestMapping(value = "/fishery/get", method = RequestMethod.GET)
+    public Result getfishery(@ModelAttribute Fishery fishery) {
+        return oneService.getFishery(fishery);
+    }
+
     //绑定游戏地址
     @ResponseBody
     @RequestMapping(value = "/fishery/bind", method = RequestMethod.POST)

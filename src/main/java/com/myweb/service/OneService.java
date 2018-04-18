@@ -31,9 +31,11 @@ public interface OneService {
 
     public Result favor(Market market);
 
-   // public Result queryCount(Opslog opslog);
+    public Result get(User user);
 
     public Result query(Opslog opslog,Pageable pageable);
 
     public Result createLog(Opslog opslog);
+
+    public Result getFishery(Fishery fishery);
 }
