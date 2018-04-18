@@ -55,7 +55,6 @@ public class OneController {
         return oneService.get(user);
     }
 
-    //获取用户
     @ResponseBody
     @RequestMapping(value = "/fishery/get", method = RequestMethod.GET)
     public Result getfishery(@ModelAttribute Fishery fishery) {

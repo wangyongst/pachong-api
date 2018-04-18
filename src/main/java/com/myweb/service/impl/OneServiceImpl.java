@@ -337,7 +337,7 @@ public class OneServiceImpl implements OneService {
         }
         List<User> savedUserList = userRepository.findByAddress(user.getAddress());
         if (savedUserList == null) {
-            result.setMessage("The Market cant be found!");
+            result.setMessage("The User cant be found!");
             return result;
         }
         result.setData(savedUserList.get(0));
