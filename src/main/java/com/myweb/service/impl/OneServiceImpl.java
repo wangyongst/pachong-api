@@ -343,6 +343,7 @@ public class OneServiceImpl implements OneService {
             result.setMessage("The User cant be found!");
             return result;
         }
+        result.setStatus(1);
         result.setData(savedUserList.get(0));
         return result;
     }
@@ -384,8 +385,13 @@ public class OneServiceImpl implements OneService {
             result.setMessage("The required parameters are empty!");
             return result;
         }
+        Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
+        if(savedFishery == null){
+            result.setMessage("The Fishery cant be found!");
+            return result;
+        }
         result.setStatus(1);
-        result.setData(fisheryRepository.findOne(fishery.getId()));
+        result.setData(savedFishery);
         return result;
     }
 
