@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "opslog")
 public class Opslog {
     private int id;
     private String address;

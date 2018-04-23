@@ -26,7 +26,7 @@ apply plugin: 'io.spring.dependency-management'
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Brussels-SR4'
+        mavenBom 'io.spring.platform:platform-bom:Brussels-SR7'
     }
 }
 
@@ -66,4 +66,8 @@ dependencies {
     compile('org.springframework.data:spring-data-jpa')
 
     compile('org.hibernate:hibernate-entitymanager')
+
+    compile('commons-io:commons-io')
+
+    compile('commons-fileupload:commons-fileupload')
 }

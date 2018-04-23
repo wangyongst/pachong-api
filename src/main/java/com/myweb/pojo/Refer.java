@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
+@Table(name = "refer")
 public class Refer {
     private int id;
     private String txhash;

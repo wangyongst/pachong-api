@@ -25,7 +25,7 @@ import java.util.List;
 
 @Service("OneService")
 @SuppressWarnings("All")
-//@Transactional(readOnly = true)
+@Transactional(readOnly = true)
 @PropertySource({"classpath:application.properties"})
 public class OneServiceImpl implements OneService {
 
@@ -49,7 +49,7 @@ public class OneServiceImpl implements OneService {
 
 
     @Override
-    //@Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result registry(User user) {
         Result result = new Result();
         if (StringUtils.isBlank(user.getAddress()) || StringUtils.isBlank(user.getSignMessage()) || StringUtils.isBlank(user.getSignedMessage())) {
@@ -70,7 +70,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    // @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setNickName(User user) {
         Result result = new Result();
         if (StringUtils.isBlank(user.getNickName()) || StringUtils.isBlank(user.getAddress())) {
@@ -91,7 +91,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    //  @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setAvatar(MultipartFile multipartFile, User user) {
         Result result = new Result();
         if (multipartFile == null || multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename()) || StringUtils.isBlank(user.getAddress())) {
@@ -153,7 +153,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    // @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result setName(Fishery fishery) {
         Result result = new Result();
         if (StringUtils.isBlank(fishery.getName()) || fishery.getId() == 0) {
@@ -175,7 +175,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    // @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result bind(Fishery fishery) {
         Result result = new Result();
         if (StringUtils.isBlank(fishery.getBindAddress()) || fishery.getId() == 0) {
@@ -200,7 +200,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    //  @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result unbind(Fishery fishery) {
         Result result = new Result();
         if (fishery.getId() == 0) {
@@ -220,7 +220,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    //   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result sell(Market market) {
         Result result = new Result();
         if (market.getFisheryId() == null || market.getStartPrice() == null || market.getStopPrice() == null || market.getSellDuration() == 0) {
@@ -251,7 +251,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    //   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result unsell(Market market) {
         Result result = new Result();
         if (market.getFisheryId() == 0) {
@@ -276,7 +276,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    //   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result buy(Fishery fishery, Refer refer) {
         Result result = new Result();
         if (fishery.getId() == 0) {
@@ -312,7 +312,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-    //   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result favor(Market market) {
         Result result = new Result();
         if (market.getId() == 0) {
@@ -339,7 +339,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         List<User> savedUserList = userRepository.findByAddress(user.getAddress());
-        if (savedUserList == null) {
+        if (savedUserList == null || savedUserList.size() == 0) {
             result.setMessage("The User cant be found!");
             return result;
         }
@@ -361,7 +361,7 @@ public class OneServiceImpl implements OneService {
     }
 
     @Override
-//    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result createLog(Opslog opslog) {
         Result result = new Result();
         if (StringUtils.isBlank(opslog.getAddress())) {
