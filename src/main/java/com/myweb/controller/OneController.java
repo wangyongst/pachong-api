@@ -84,8 +84,7 @@ public class OneController {
     public Result send(@ModelAttribute Fishery fishery, @RequestParam String sendAddress, @ModelAttribute Opslog opslog) {
         opslog.setAction("赠送渔场");
         opslog.setMemo("渔场ID:" + fishery.getId()  + " ,赠送地址:" + sendAddress);
-        Result result = oneService.createLog(opslog);
-        return result;
+        return oneService.createLogAsResult(opslog);
     }
 
     //取消绑定id
@@ -104,8 +103,7 @@ public class OneController {
     public Result sell(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
         opslog.setAction("出售渔场");
         opslog.setMemo("渔场ID:" + market.getFisheryId() + ",起始价格:" + market.getStartPrice() + ", 终止价格:" + market.getStopPrice() + ", 销售时长:" + market.getSellDuration());
-        Result result = oneService.createLog(opslog);
-        return result;
+        return oneService.createLogAsResult(opslog);
     }
 
     //取消出售
@@ -114,8 +112,7 @@ public class OneController {
     public Result unsell(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
         opslog.setAction("取消出售渔场");
         opslog.setMemo("渔场ID:" + market.getFisheryId());
-        Result result = oneService.createLog(opslog);
-        return result;
+        return oneService.createLogAsResult(opslog);
     }
 
     //购买渔场

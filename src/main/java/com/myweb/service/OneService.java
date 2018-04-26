@@ -38,4 +38,6 @@ public interface OneService {
     public Result createLog(Opslog opslog);
 
     public Result getFishery(Fishery fishery);
+
+    public Result createLogAsResult(Opslog opslog);
 }

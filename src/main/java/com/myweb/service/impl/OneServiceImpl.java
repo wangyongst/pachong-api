@@ -389,6 +389,24 @@ public class OneServiceImpl implements OneService {
         return result;
     }
 
+    @Override
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    public Result createLogAsResult(Opslog opslog) {
+        Result result = new Result();
+        if (StringUtils.isBlank(opslog.getAddress())) {
+            result.setMessage("The required parameters are empty!");
+            return result;
+        }
+        opslog.setId(0);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long currentTime = System.currentTimeMillis();
+        opslog.setActionTime(df.format(currentTime));
+        opslogRepository.save(opslog);
+        result.setStatus(1);
+        result.setData(opslog);
+        return result;
+    }
+
     /**
      * 保存文件，直接以multipartFile形式
      *
