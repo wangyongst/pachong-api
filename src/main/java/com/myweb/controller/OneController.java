@@ -18,7 +18,7 @@ public class OneController {
     @Autowired
     public OneService oneService;
 
-    //注册， 提交签名信息，并在后端做验证
+    //注册
     @ResponseBody
     @RequestMapping(value = "/user/registy", method = RequestMethod.POST)
     public Result registy(@ModelAttribute User user) {
@@ -64,7 +64,8 @@ public class OneController {
     @ResponseBody
     @RequestMapping(value = "/fishery/bind", method = RequestMethod.POST)
     public Result bind(@ModelAttribute Fishery fishery, @ModelAttribute Opslog opslog) {
-        opslog.setAction("绑定游戏地址");
+        opslog.setAction("绑定渔场");
+        opslog.setMemo("渔场ID:" + fishery.getId() + " ,绑定地址:" + fishery.getAddress());
         Result result = oneService.createLog(opslog);
         return oneService.bind(fishery);
     }
@@ -73,16 +74,26 @@ public class OneController {
     @ResponseBody
     @RequestMapping(value = "/fishery/setName", method = RequestMethod.POST)
     public Result setName(@ModelAttribute Fishery fishery, @ModelAttribute Opslog opslog) {
-        opslog.setAction("设置渔场名称");
-        Result result = oneService.createLog(opslog);
         return oneService.setName(fishery);
     }
 
-    //取消绑定
+
+    //赠送渔场
+    @ResponseBody
+    @RequestMapping(value = "/fishery/send", method = RequestMethod.POST)
+    public Result send(@ModelAttribute Fishery fishery, @RequestParam String sendAddress, @ModelAttribute Opslog opslog) {
+        opslog.setAction("赠送渔场");
+        opslog.setMemo("渔场ID:" + fishery.getId()  + " ,赠送地址:" + sendAddress);
+        Result result = oneService.createLog(opslog);
+        return result;
+    }
+
+    //取消绑定id
     @ResponseBody
     @RequestMapping(value = "/fishery/unbind", method = RequestMethod.POST)
     public Result unbind(@ModelAttribute Fishery fishery, @ModelAttribute Opslog opslog) {
-        opslog.setAction("取消绑定");
+        opslog.setAction("解除渔场绑定");
+        opslog.setMemo("渔场ID:" + fishery.getId());
         Result result = oneService.createLog(opslog);
         return oneService.unbind(fishery);
     }
@@ -91,25 +102,32 @@ public class OneController {
     @ResponseBody
     @RequestMapping(value = "/fishery/sell", method = RequestMethod.POST)
     public Result sell(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
-        opslog.setAction("出售");
+        opslog.setAction("出售渔场");
+        opslog.setMemo("渔场ID:" + market.getFisheryId() + ",起始价格:" + market.getStartPrice() + ", 终止价格:" + market.getStopPrice() + ", 销售时长:" + market.getSellDuration());
         Result result = oneService.createLog(opslog);
-        return oneService.sell(market);
+        return result;
     }
 
     //取消出售
     @ResponseBody
     @RequestMapping(value = "/fishery/unsell", method = RequestMethod.POST)
     public Result unsell(@ModelAttribute Market market, @ModelAttribute Opslog opslog) {
-        opslog.setAction("取消出售");
+        opslog.setAction("取消出售渔场");
+        opslog.setMemo("渔场ID:" + market.getFisheryId());
         Result result = oneService.createLog(opslog);
-        return oneService.unsell(market);
+        return result;
     }
 
     //购买渔场
     @ResponseBody
     @RequestMapping(value = "/market/buy", method = RequestMethod.POST)
     public Result buy(@ModelAttribute Fishery fishery, @ModelAttribute Refer refer, @ModelAttribute Opslog opslog) {
-        opslog.setAction("购买渔场");
+        if (fishery.getId() == 0) {
+            opslog.setAction("购买新渔场");
+        } else {
+            opslog.setAction("购买渔场");
+            opslog.setMemo("渔场ID:" + fishery.getId());
+        }
         Result result = oneService.createLog(opslog);
         return oneService.buy(fishery, refer);
     }

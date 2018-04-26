@@ -184,8 +184,10 @@ public class OneServiceImpl implements OneService {
         }
         Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
         if (savedFishery == null) {
-            result.setMessage("The Fishery cant be found!");
-            return result;
+            savedFishery = new Fishery();
+            savedFishery.setId(fishery.getId());
+            fisheryRepository.save(savedFishery);
+            savedFishery = fisheryRepository.findOne(fishery.getId());
         }
         savedFishery.setBindAddress(fishery.getBindAddress());
         if (StringUtils.isBlank(savedFishery.getBindAddress())) {
@@ -279,10 +281,6 @@ public class OneServiceImpl implements OneService {
     @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result buy(Fishery fishery, Refer refer) {
         Result result = new Result();
-        if (fishery.getId() == 0) {
-            result.setMessage("The required parameters are empty!");
-            return result;
-        }
         List marketList = marketRepository.findAllByFisheryId(fishery.getId());
         if (marketList.size() == 0) {
             Fishery fishery1 = new Fishery();
@@ -298,10 +296,6 @@ public class OneServiceImpl implements OneService {
             referRepository.save(refer);
         }
         Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
-        if (savedFishery == null) {
-            result.setMessage("The Fishery cant be found!");
-            return result;
-        }
         savedFishery.setSellStatus(null);
         savedFishery.setAddress(fishery.getAddress());
         fisheryRepository.save(savedFishery);
