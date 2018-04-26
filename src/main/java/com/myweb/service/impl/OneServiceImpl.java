@@ -49,7 +49,7 @@ public class OneServiceImpl implements OneService {
 
 
     @Override
-   @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result registry(User user) {
         Result result = new Result();
         if (StringUtils.isBlank(user.getAddress()) || StringUtils.isBlank(user.getSignMessage()) || StringUtils.isBlank(user.getSignedMessage())) {
@@ -281,12 +281,6 @@ public class OneServiceImpl implements OneService {
     @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
     public Result buy(Fishery fishery, Refer refer) {
         Result result = new Result();
-        List marketList = marketRepository.findAllByFisheryId(fishery.getId());
-        if (marketList.size() == 0) {
-            Fishery fishery1 = new Fishery();
-            fishery1.setId(fishery.getId());
-            fisheryRepository.save(fishery1);
-        }
         if (StringUtils.isNotBlank(refer.getReferCode())) {
             refer.setId(0);
             refer.setStatus("buy");
@@ -296,10 +290,16 @@ public class OneServiceImpl implements OneService {
             referRepository.save(refer);
         }
         Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
+        if (savedFishery == null) {
+            savedFishery = new Fishery();
+            savedFishery.setId(fishery.getId());
+        }
         savedFishery.setSellStatus(null);
         savedFishery.setAddress(fishery.getAddress());
         fisheryRepository.save(savedFishery);
-        marketRepository.delete(marketRepository.findAllByFisheryId(fishery.getId()));
+        if (fishery.getId() != 0) {
+            marketRepository.delete(marketRepository.findAllByFisheryId(fishery.getId()));
+        }
         result.setStatus(1);
         result.setData(savedFishery);
         return result;
@@ -380,7 +380,7 @@ public class OneServiceImpl implements OneService {
             return result;
         }
         Fishery savedFishery = fisheryRepository.findOne(fishery.getId());
-        if(savedFishery == null){
+        if (savedFishery == null) {
             result.setMessage("The Fishery cant be found!");
             return result;
         }
