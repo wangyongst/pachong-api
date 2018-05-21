@@ -175,10 +175,8 @@ public class IcrisApi {
             }
         });
         int page = parseDocumentPage(searchDocumentPage(company.getNo()));
-        if (page > 5) page = 5;
         List<DocFile> docFiles = new ArrayList<DocFile>();
         for (int i = 1; i <= page; i++) {
-            Thread.sleep(2000);
             List<DocFile> docFileList = parseDocument(searchDocument(company.getNo(), i, page), company.getNo());
             if (docFileList != null && docFileList.size() > 0) docFiles.addAll(docFileList);
         }
@@ -198,5 +196,4 @@ public class IcrisApi {
         });
         return true;
     }
-
 }
