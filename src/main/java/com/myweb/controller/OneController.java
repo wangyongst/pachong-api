@@ -21,7 +21,7 @@ public class OneController {
     //爬虫查询
     @ResponseBody
     @RequestMapping(value = "/pachong/query", method = RequestMethod.GET)
-    public Result query(@ModelAttribute Company company, @RequestParam Integer type) {
+    public Result query(@ModelAttribute Company company, @RequestParam Integer type) throws Exception {
         return oneService.query(company, type);
     }
 

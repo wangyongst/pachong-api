@@ -1,6 +1,7 @@
 package com.myweb.service.impl;
 
 import com.myweb.dao.jpa.hibernate.*;
+import com.myweb.icris.IcrisApi;
 import com.myweb.pojo.Company;
 import com.myweb.service.OneService;
 import com.myweb.vo.AllThings;
@@ -40,10 +41,13 @@ public class OneServiceImpl implements OneService {
 
 
     @Override
-    @Transactional(value = "myTM", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-    public Result query(Company company, Integer type) {
+    public Result query(Company company, Integer type) throws Exception {
         Result result = new Result();
         if (StringUtils.isNotBlank(company.getNo()) && type != null && type == 0) {
+            IcrisApi api = new IcrisApi();
+            api.agree();
+            api.chinese();
+            api.pachong(Integer.parseInt(company.getNo()));
             List<Company> companies = companyRepository.findByNo(company.getNo());
             if (companies.size() != 1) {
                 result.setMessage("Cant find Company by this NO");
@@ -57,26 +61,6 @@ public class OneServiceImpl implements OneService {
             result.setData(allThings);
             return result;
         }
-//        } else if (StringUtils.isNotBlank(company.getName()) && type != null && type == 1) {
-//            List<Company> companies = companyRepository.findByNo(company.getNo());
-//            if (companies.size() == 0) {
-//                result.setMessage("Cant find Company by this Name");
-//                return result;
-//            } else {
-//                result.setStatus(1);
-//                result.setData(companies);
-//                return result;
-//            }
-//        } else if (StringUtils.isNotBlank(company.getEnname()) && type != null && type == 1) {
-//            List<Company> companies = companyRepository.findByEnname(company.getEnname());
-//            if (companies.size() == 0) {
-//                result.setMessage("Cant find Company by this ENName");
-//                return result;
-//            } else {
-//                result.setStatus(1);
-//                result.setData(companies);
-//                return result;
-//            }
         else {
             result.setMessage("The required parameters are right!");
             return result;

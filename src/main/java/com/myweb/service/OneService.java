@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface OneService {
 
-    public Result query(Company company, Integer type);
+    public Result query(Company company, Integer type) throws Exception;
 
     public Result search(Company company, Integer type);
 

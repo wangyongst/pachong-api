@@ -46,4 +46,12 @@ dependencies {
     compile('org.hibernate:hibernate-entitymanager')
 
     compile('org.apache.tomcat:tomcat-jdbc')
+
+    compile('org.apache.httpcomponents:httpclient')
+
+    compile('org.jsoup:jsoup:1.11.3')
+
+    compile('commons-dbutils:commons-dbutils:1.7')
+
+    compile('org.apache.tomcat:tomcat-jdbc')
 }
