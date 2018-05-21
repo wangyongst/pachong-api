@@ -4,7 +4,6 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven'
-apply plugin: 'war'
 
 repositories {
     mavenLocal()
@@ -19,55 +18,32 @@ buildscript {
     }
     dependencies {
         classpath 'io.spring.gradle:dependency-management-plugin:1.0.0.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.2.RELEASE'
     }
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Brussels-SR7'
+        mavenBom 'io.spring.platform:platform-bom:Cairo-SR1'
     }
 }
-
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = "utf-8"
 
 dependencies {
 
-    testCompile("junit:junit")
+    compile("org.springframework.boot:spring-boot-starter-web")
 
-    compile('org.apache.logging.log4j:log4j-api',
-            'org.apache.logging.log4j:log4j-core')
+    compile'org.apache.commons:commons-lang3'
 
-    compile('org.apache.tomcat:tomcat-jdbc')
-
-    compile('org.springframework:spring-context')
-
-    compile('org.apache.commons:commons-lang3')
-
-    compile("javax.servlet:javax.servlet-api")
-
-    compile('org.springframework:spring-webmvc')
-
-    compile('org.springframework.security:spring-security-web')
-
-    compile('com.fasterxml.jackson.core:jackson-databind', 'com.fasterxml.jackson.core:jackson-core')
-
-    compile("mysql:mysql-connector-java")
-
-    compile("javax.servlet:jstl",
-            "javax.servlet:javax.servlet-api")
-
-    compile("javax.servlet.jsp:javax.servlet.jsp-api")
+    compile"mysql:mysql-connector-java"
 
     compile('org.springframework.data:spring-data-jpa')
 
     compile('org.hibernate:hibernate-entitymanager')
 
-    compile('commons-io:commons-io')
-
-    compile('commons-fileupload:commons-fileupload')
+    compile('org.apache.tomcat:tomcat-jdbc')
 }
