@@ -1,9 +1,6 @@
 package com.myweb.pojo;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -37,6 +34,7 @@ public class CompanyInfo {
         this.enname = enname;
     }
 
+    @Id
     @Basic
     @Column(name = "address")
     public String getAddress() {
