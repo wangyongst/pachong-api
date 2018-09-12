@@ -60,6 +60,7 @@ public class OneServiceImpl implements OneService {
             allThings.setCompany(companies.get(0));
             allThings.setHistories(historyRepository.findByNoOrderByDateAsc(companies.get(0).getNo()));
             allThings.setDocfiles(docfileRepository.findByNoOrderByIdAsc(companies.get(0).getNo()));
+            allThings.setCompanyInfos(companyInfoRepository.findByNo(companies.get(0).getNo()));
             result.setStatus(1);
             result.setData(allThings);
             return result;
