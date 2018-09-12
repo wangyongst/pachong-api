@@ -1,6 +1,7 @@
 package com.myweb.vo;
 
 import com.myweb.pojo.Company;
+import com.myweb.pojo.CompanyInfo;
 import com.myweb.pojo.Docfile;
 import com.myweb.pojo.History;
 
@@ -10,6 +11,15 @@ public class AllThings {
     private Company company;
     private List<History> histories;
     private List<Docfile> docfiles;
+    private List<CompanyInfo> companyInfos;
+
+    public List<CompanyInfo> getCompanyInfos() {
+        return companyInfos;
+    }
+
+    public void setCompanyInfos(List<CompanyInfo> companyInfos) {
+        this.companyInfos = companyInfos;
+    }
 
     public Company getCompany() {
         return company;

@@ -37,6 +37,9 @@ public class OneServiceImpl implements OneService {
     private DocfileRepository docfileRepository;
 
     @Autowired
+    private CompanyInfoRepository companyInfoRepository;
+
+    @Autowired
     private HistoryRepository historyRepository;
 
 
@@ -79,31 +82,42 @@ public class OneServiceImpl implements OneService {
             allThings.setCompany(companies.get(0));
             allThings.setHistories(historyRepository.findByNoOrderByDateAsc(companies.get(0).getNo()));
             allThings.setDocfiles(docfileRepository.findByNoOrderByIdAsc(companies.get(0).getNo()));
+            allThings.setCompanyInfos(companyInfoRepository.findByNo(companies.get(0).getNo()));
             result.setStatus(1);
             result.setData(allThings);
             return result;
         } else if (StringUtils.isNotBlank(company.getName()) && type != null && type == 1) {
-            List<Company> companies = companyRepository.findByNo(company.getNo());
+            List<Company> companies = companyRepository.findByName(company.getName());
             if (companies.size() == 0) {
                 result.setMessage("Cant find Company by this Name");
                 return result;
             } else {
+                AllThings allThings = new AllThings();
+                allThings.setCompany(companies.get(0));
+                allThings.setHistories(historyRepository.findByNoOrderByDateAsc(companies.get(0).getNo()));
+                allThings.setDocfiles(docfileRepository.findByNoOrderByIdAsc(companies.get(0).getNo()));
+                allThings.setCompanyInfos(companyInfoRepository.findByNo(companies.get(0).getNo()));
                 result.setStatus(1);
-                result.setData(companies);
+                result.setData(allThings);
                 return result;
             }
-        } else if (StringUtils.isNotBlank(company.getEnname()) && type != null && type == 1) {
+        } else if (StringUtils.isNotBlank(company.getEnname()) && type != null && type == 2) {
             List<Company> companies = companyRepository.findByEnname(company.getEnname());
             if (companies.size() == 0) {
                 result.setMessage("Cant find Company by this ENName");
                 return result;
             } else {
+                AllThings allThings = new AllThings();
+                allThings.setCompany(companies.get(0));
+                allThings.setHistories(historyRepository.findByNoOrderByDateAsc(companies.get(0).getNo()));
+                allThings.setDocfiles(docfileRepository.findByNoOrderByIdAsc(companies.get(0).getNo()));
+                allThings.setCompanyInfos(companyInfoRepository.findByNo(companies.get(0).getNo()));
                 result.setStatus(1);
-                result.setData(companies);
+                result.setData(allThings);
                 return result;
             }
         } else {
-            result.setMessage("The required parameters are right!");
+            result.setMessage("The required parameters are not right!");
             return result;
         }
     }
